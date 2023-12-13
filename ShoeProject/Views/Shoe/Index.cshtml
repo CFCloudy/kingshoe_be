@@ -1,0 +1,137 @@
+﻿@model IEnumerable<Shoe>
+
+@{
+    ViewData["Title"] = "Index";
+    var shoe = new Shoe();
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+<h1>Shoe</h1>
+
+<p>
+    <a asp-action="Create">Tạo mới sản phẩm</a>
+</p>
+<form asp-action="Search" asp-route-model="@shoe">
+    <div class="row">
+        <div class="form-group col-3">
+            <label class="control-label">Tên sản phẩm</label>
+            <input name="nameProduct" class="form-control" />
+        </div>
+        <div class="form-group col-3">
+            <label class="control-label">Tên thương hiệu</label>
+            <select name="brandGroup" class="form-control" asp-items="ViewBag.BrandGroup"></select>
+        </div>
+        <div class="form-group col-3">
+            <label class="control-label">Tên tính năng</label>
+            <select name="feature" class="form-control" asp-items="ViewBag.Feature"></select>
+        </div>
+        <div class="form-group col-3">
+            <label class="control-label">Tên phong cách</label>
+            <select name="styleGroup" class="form-control" asp-items="ViewBag.StyleGroup"></select>
+        </div>
+    </div>
+    <div class="form-group mt-2">
+        <input type="submit" value="Search" class="btn btn-primary" />
+        <input type="submit" asp-action="Index" value="Reset" class="btn btn-primary" />
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                Tên sản phẩm
+            </th>
+            <th>
+                Giá Bán
+            </th>
+            <th>
+                Tên Thương Hiệu
+            </th>
+            <th>
+                Tên tính năng
+            </th>
+            <th>
+                Tên Phong Cách
+            </th>
+            <th>
+                Số lượng
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DisplayPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BrandGroupNavigation.BrandName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FeatureNavigation.FeatureName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StyleGroupNavigation.StyleName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (pager.TotalPages > 0)
+{
+    <ul class="pagination justify-content-end">
+        @if (pager.CurrentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="1">First</a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(pager.CurrentPage - 1)">Previous</a>
+            </li>
+        }
+        @for (int pge = pager.StartPage; pge <= pager.EndPage; pge++)
+        {
+            <li class="page-item @(pge == pager.CurrentPage ? " active":"")">
+                <a class="page-link" asp-action="Index" asp-route-page="@pge">@pge</a>
+            </li>
+        }
+        @if (pager.CurrentPage < pager.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(pager.CurrentPage + 1)">Next</a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@(pager.TotalPages)">Last</a>
+            </li>
+
+        }
+
+    </ul>
+}

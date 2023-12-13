@@ -1,0 +1,65 @@
+﻿@model ShoesVariant
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>ShoesVariant</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Status" />
+            <input type="hidden" asp-for="VariantName" />
+            <input asp-for="ProductId" hidden value="@Model.ProductId" class="form-control" />
+            <input asp-for="Product" hidden value="@Model.Product" class="form-control" />
+            <div class="form-group">
+                <label asp-for="Stock" class="control-label">Số lượng</label>
+                <input asp-for="Stock" class="form-control" />
+                <span asp-validation-for="Stock" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Size" class="control-label">Size</label>
+                <select asp-for="Size" class="form-control" asp-items="ViewBag.Size"></select>
+                <span asp-validation-for="Size" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Color" class="control-label">Màu sắc</label>
+                <select asp-for="Color" class="form-control" asp-items="ViewBag.Color"></select>
+                <span asp-validation-for="Color" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Mô tả</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedAt" class="control-label">Ngày tạo</label>
+                <input asp-for="CreatedAt" class="form-control" />
+                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedAt" class="control-label">Ngày cập nhật</label>
+                <input asp-for="ModifiedAt" class="form-control" />
+                <span asp-validation-for="ModifiedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

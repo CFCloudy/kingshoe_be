@@ -1,0 +1,130 @@
+﻿@model IEnumerable<DAL.Models.ShippingDetail>
+
+@{
+    var ListUsers = ViewBag.UserList as List<DAL.Models.UserProfile>;
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<p>
+    <input type="text" class="form-control" value="@ViewBag.SearchKey" id="searchBar" style="max-width:30%;"/>
+    <a class="searchFunc" asp-action="Index" asp-route-key="@ViewBag.SearchKey" asp-route-page="1" asp-route-rowPerPage="5">Search</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Email
+            </th>
+            <th>
+                Tên người nhận
+            </th>
+            <th>
+                Địa chỉ nhận
+            </th>
+            <th>
+                Số điện thoại
+            </th>
+@*            <th>
+                @Html.DisplayNameFor(model => model.SenderName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SenderAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SenderPhone)
+            </th>*@
+            <th>
+                Ghi chú
+            </th>
+            <th>
+                Trạng thái
+            </th>
+            <th>
+                Ngày tạo
+            </th>
+            <th>
+                Ngày cập nhật cuối
+            </th>
+            <th>
+                Mã đơn hàng
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            <tr>
+                <td>
+                    @(
+                        (ListUsers.FirstOrDefault(c=>c.Id == item.UserId) ?? new DAL.Models.UserProfile()).Email
+                    )
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShippingName)
+            </td>
+            <td>
+                @((item.ShippingAddress ?? "").Substring(0,(item.ShippingAddress ?? "").Length > 100 ? 100 : (item.ShippingAddress ?? "").Length))
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShippingPhone)
+            </td>
+@*            <td>
+                @Html.DisplayFor(modelItem => item.SenderName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SenderAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SenderPhone)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderNote)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order.OrderCode)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@if (ViewBag.CurrentPage > 1)
+{
+    <a class="searchFunc" asp-action="Index" asp-route-key="@ViewBag.SearchKey" asp-route-page="@(ViewBag.CurrentPage-1)" asp-route-rowPerPage="5">Prev</a>
+} else
+{
+    <a class="searchFunc" asp-action="Index" asp-route-key="@ViewBag.SearchKey" asp-route-page="@(ViewBag.CurrentPage)" asp-route-rowPerPage="5" disabled>Prev</a>
+}
+<p>@ViewBag.CurrentPage / @ViewBag.TopPage</p>
+@if (ViewBag.TopPage == ViewBag.CurrentPage)
+{
+    <a class="searchFunc" asp-action="Index" asp-route-key="@ViewBag.SearchKey" asp-route-page="@(ViewBag.CurrentPage)" asp-route-rowPerPage="5">Next</a>
+} else
+{
+    <a class="searchFunc" asp-action="Index" asp-route-key="@ViewBag.SearchKey" asp-route-page="@(ViewBag.CurrentPage+1)" asp-route-rowPerPage="5">Next</a>
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+$('#searchBar').change(() => {
+    $('.searchFunc').attr('href', $('.searchFunc').attr('href') + "&key=" + $('#searchBar').val());
+});
+</script>

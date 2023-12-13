@@ -1,0 +1,97 @@
+﻿@model IEnumerable<DAL.Models.Order>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<p>
+    <input type="text" class="form-control" value="@ViewBag.SearchKey" id="searchBar"/>
+    <a class="searchFunc" asp-action="Index" asp-route-key="@ViewBag.SearchKey" asp-route-page="1" asp-route-rowPerPage="1">Search</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Detail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Detail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Total)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-controller="OrderItems" asp-action="Index" asp-route-oId="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@if (ViewBag.CurrentPage > 1)
+{
+    <a class="searchFunc" asp-action="Index" asp-route-key="@ViewBag.SearchKey" asp-route-page="@(ViewBag.CurrentPage-1)" asp-route-rowPerPage="1">Prev</a>
+} else
+{
+    <a class="searchFunc" asp-action="Index" asp-route-key="@ViewBag.SearchKey" asp-route-page="@(ViewBag.CurrentPage)" asp-route-rowPerPage="1" disabled>Prev</a>
+}
+<p>@ViewBag.CurrentPage / @ViewBag.TopPage</p>
+@if (ViewBag.TopPage == ViewBag.CurrentPage)
+{
+    <a class="searchFunc" asp-action="Index" asp-route-key="@ViewBag.SearchKey" asp-route-page="@(ViewBag.CurrentPage)" asp-route-rowPerPage="1">Next</a>
+} else
+{
+    <a class="searchFunc" asp-action="Index" asp-route-key="@ViewBag.SearchKey" asp-route-page="@(ViewBag.CurrentPage+1)" asp-route-rowPerPage="1">Next</a>
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+$('#searchBar').change(() => {
+    $('.searchFunc').attr('href', $('.searchFunc').attr('href') + "&key=" + $('#searchBar').val());
+});
+</script>
